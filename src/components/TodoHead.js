@@ -28,7 +28,6 @@ const TodoHeadBlock = styled.div`
 
 const TodoHead = () => {
   const todos = useTodoState();
-  console.log(todos); // todos가 잘 불러와지는지 확인
 
   return (
     <TodoHeadBlock>
