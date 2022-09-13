@@ -20,6 +20,11 @@ function todoReducer(state, action) {
         todo.id === action.id ? { ...todo, done: !todo.done } : todo
       );
       break;
+    case "Edit":
+      newTodo = state.map((todo) =>
+        todo.id === action.todo.id ? { ...todo, text: action.todo.text } : todo
+      );
+      break;
     case "REMOVE":
       newTodo = state.filter((todo) => todo.id !== action.id);
       break;

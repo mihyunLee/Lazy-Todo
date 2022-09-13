@@ -1,7 +1,21 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled, { css } from "styled-components";
-import { MdDone, MdDelete } from "react-icons/md";
+import { MdDone, MdDelete, MdEdit, MdCheck } from "react-icons/md";
 import { useTodoDispatch } from "../TodoContext";
+
+const Edit = styled.div`
+  display: flex;
+  align-items center;
+  justify-content: center;
+  margin-right: 5px;
+  color: #dee2e6;
+  font-size: 24px;
+  cursor: pointer;
+  &: hover {
+    color: #38d9a9;
+  }
+  display: none;
+`;
 
 const Remove = styled.div`
   display: flex;
@@ -23,6 +37,9 @@ const TodoItemBlock = styled.div`
   padding-bottom: 12px;
   &:hover {
     ${Remove} {
+      display: initial;
+    }
+    ${Edit} {
       display: initial;
     }
   }
@@ -47,8 +64,10 @@ const CheckCircle = styled.div`
     `}
 `;
 
-const Text = styled.div`
+const Text = styled.input`
   flex: 1;
+  border: none;
+  outline: none;
   font-size: 21px;
   color: #495057;
   ${(props) =>
@@ -60,15 +79,53 @@ const Text = styled.div`
 
 const TodoItem = ({ id, done, text }) => {
   const dispatch = useTodoDispatch();
+
+  const [isEdit, setIsEdit] = useState(false);
+  const [newTodo, setNewTodo] = useState(text);
+
+  const inputRef = useRef(null);
+
   const onToggle = () => dispatch({ type: "TOGGLE", id });
   const onRemove = () => dispatch({ type: "REMOVE", id });
+  const onEdit = () => {
+    inputRef.current.readOnly = false;
+    if (isEdit) {
+      dispatch({
+        type: "Edit",
+        todo: {
+          id,
+          text: newTodo,
+          done,
+        },
+      });
+    }
+    setIsEdit(!isEdit);
+  };
+  const onChangeTodoInput = (e) => {
+    setNewTodo(e.target.value);
+  };
+
+  useEffect(() => {
+    if (isEdit) {
+      inputRef.current.focus();
+    }
+  }, [isEdit]);
 
   return (
     <TodoItemBlock>
       <CheckCircle done={done} onClick={onToggle}>
         {done && <MdDone />}
       </CheckCircle>
-      <Text done={done}>{text}</Text>
+      <Text
+        readOnly
+        ref={inputRef}
+        done={done}
+        value={newTodo}
+        onChange={onChangeTodoInput}
+      />
+      <Edit done={done} onClick={onEdit}>
+        {!done && (!isEdit ? <MdEdit /> : <MdCheck />)}
+      </Edit>
       <Remove onClick={onRemove}>
         <MdDelete />
       </Remove>
