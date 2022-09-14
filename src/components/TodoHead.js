@@ -42,7 +42,7 @@ const TodoHead = () => {
     <TodoHeadBlock>
       <h1>{dateString}</h1>
       <div className="day">{dayName}</div>
-      <div className="tasks-left">남은 할 일: {undoneTasks.length}개</div>
+      <div className="tasks-left">✏️ 남은 할 일: {undoneTasks.length}개</div>
     </TodoHeadBlock>
   );
 };

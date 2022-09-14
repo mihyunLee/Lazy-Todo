@@ -10,19 +10,21 @@ const TodoListBlock = styled.div`
   overflow-y: auto;
 `;
 
-const TodoList = () => {
+const TodoList = ({ done }) => {
   const todos = useTodoState();
 
   return (
     <TodoListBlock>
-      {todos.map((todo) => (
-        <TodoItem
-          key={todo.id}
-          id={todo.id}
-          text={todo.text}
-          done={todo.done}
-        />
-      ))}
+      {todos
+        .filter((todo) => todo.done === done)
+        .map((todo) => (
+          <TodoItem
+            key={todo.id}
+            id={todo.id}
+            text={todo.text}
+            done={todo.done}
+          />
+        ))}
     </TodoListBlock>
   );
 };
