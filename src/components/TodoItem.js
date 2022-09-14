@@ -5,13 +5,13 @@ import { useTodoDispatch } from "../TodoContext";
 
 const Edit = styled.div`
   display: flex;
-  align-items center;
+  align-items: center;
   justify-content: center;
   margin-right: 5px;
   color: #dee2e6;
   font-size: 24px;
   cursor: pointer;
-  &: hover {
+  &:hover {
     color: #38d9a9;
   }
   display: none;
