@@ -8,8 +8,23 @@ import TodoTemplate from "./components/TodoTemplate";
 import { TodoProvider } from "./TodoContext";
 
 const GlobalStyle = createGlobalStyle`
+  @font-face {
+    font-family: "NotoSans";
+    src: url("https://cdn.jsdelivr.net/npm/noto-sans-kr@0.1.1/fonts/NotoSans-Regular.woff2")
+    format("woff")
+  }
+  *{
+    font-family: "NotoSans";
+
+    -ms-overflow-style: none;
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  }
   body{
     background: #e9ecef;
+
   }
 `;
 
