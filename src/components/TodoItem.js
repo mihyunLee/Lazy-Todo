@@ -97,7 +97,7 @@ const TodoItem = ({ id, done, text }) => {
   const onToggle = () => dispatch({ type: "TOGGLE", id });
   const onRemove = () => dispatch({ type: "REMOVE", id });
   const onEdit = () => {
-    textRef.current.readOnly = false;
+    textRef.current.readOnly = !textRef.current.readOnly;
     if (isEdit) {
       dispatch({
         type: "Edit",
