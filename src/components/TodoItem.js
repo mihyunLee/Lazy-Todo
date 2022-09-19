@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled, { css } from "styled-components";
 import { MdDone, MdDelete, MdEdit, MdCheck } from "react-icons/md";
+import TextareaAutosize from "react-autosize-textarea";
 import { useTodoDispatch } from "../TodoContext";
 
 const Edit = styled.div`
@@ -64,13 +65,11 @@ const CheckCircle = styled.div`
     `}
 `;
 
-const Text = styled.textarea`
+const CustomTextarea = styled(TextareaAutosize)`
   flex: 1;
   resize: none;
-  height: ${({ row }) => row * 42 + 4}px;
   border: none;
   outline: none;
-  background-color: #38d9a9;
   line-height: 42px;
   font-size: 21px;
   color: #495057;
@@ -88,11 +87,6 @@ const TodoItem = ({ id, done, text }) => {
   const [newTodo, setNewTodo] = useState(text);
 
   const textRef = useRef(null);
-
-  const [textareaHeight, setTextareaHeight] = useState({
-    row: 1,
-    lineBreak: {},
-  });
 
   const onToggle = () => dispatch({ type: "TOGGLE", id });
   const onRemove = () => dispatch({ type: "REMOVE", id });
@@ -114,37 +108,6 @@ const TodoItem = ({ id, done, text }) => {
     setNewTodo(e.target.value);
   };
 
-  // 사용자 입력 업데이트 및 줄바꿈 감지
-  const handleResizeTextarea = (e) => {
-    const { scrollHeight, clientHeight, value } = e.target;
-
-    // (1) 스크롤 생성 시
-    if (scrollHeight > clientHeight) {
-      setTextareaHeight((prev) => ({
-        row: prev.row + 1,
-        lineBreak: { ...prev.lineBreak, [value.length - 1]: true },
-      }));
-    }
-
-    // (2) 텍스트를 지워서 줄바꿈 지점에 도달했을 경우
-    if (textareaHeight.lineBreak[value.length]) {
-      setTextareaHeight((prev) => ({
-        row: prev.row - 1,
-        lineBreak: { ...prev.lineBreak, [value.length]: false },
-      }));
-    }
-  };
-
-  // 엔터 키 입력
-  const onKeyEnter = (e) => {
-    if (e.code === "Enter") {
-      setTextareaHeight((prev) => ({
-        row: prev.row + 1,
-        lineBreak: { ...prev.lineBreak, [e.target.value.length]: true },
-      }));
-    }
-  };
-
   useEffect(() => {
     if (isEdit) {
       textRef.current.focus();
@@ -156,15 +119,12 @@ const TodoItem = ({ id, done, text }) => {
       <CheckCircle done={done} onClick={onToggle}>
         {done && <MdDone />}
       </CheckCircle>
-      <Text
+      <CustomTextarea
         readOnly
         ref={textRef}
         done={done}
         value={newTodo}
         onChange={onChangeTodoInput}
-        onInput={handleResizeTextarea}
-        onKeyDown={onKeyEnter}
-        row={textareaHeight.row}
       />
       <Edit done={done} onClick={onEdit}>
         {!done && (!isEdit ? <MdEdit /> : <MdCheck />)}
